@@ -505,6 +505,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: {fileID: 1868833348}
   touchFrames: 0
+  enhancedTouchFrames: 0
+  buttonPresses: 0
 --- !u!4 &973023547
 Transform:
   m_ObjectHideFlags: 0
@@ -589,7 +591,11 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Touch Frames: _'
+  m_Text: 'Touch Frames: _
+
+    Enhanced Touch Frames: _
+
+    Button Presses: _'
 --- !u!222 &1868833349
 CanvasRenderer:
   m_ObjectHideFlags: 0
