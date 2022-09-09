@@ -8,9 +8,9 @@ using TouchPhase = UnityEngine.InputSystem.TouchPhase;
 public class TouchDebugger : MonoBehaviour
 {
     [SerializeField] private Text text;
-    [SerializeField] public int touchFrames;
-    [SerializeField] public int enhancedTouchFrames;
-    [SerializeField] public int buttonPresses;
+    private int _enhancedTouchUp;
+    private int _eventTouchUp;
+    private int _buttonPresses;
 
     public void SetFrameRate(int fps)
     {
@@ -24,7 +24,7 @@ public class TouchDebugger : MonoBehaviour
             EnhancedTouchSupport.Enable();
         }
     }
-    
+
     public void DisableEnhancedTouch()
     {
         while (EnhancedTouchSupport.enabled)
@@ -35,13 +35,16 @@ public class TouchDebugger : MonoBehaviour
 
     public void ButtonPress()
     {
-        buttonPresses++;
+        _buttonPresses++;
     }
 
     private void Start()
     {
         SetFrameRate(2);
         EnableEnhancedTouch();
+
+        // Event based
+        Touch.onFingerUp += _ => _eventTouchUp++;
     }
 
     private void Update()
@@ -52,27 +55,18 @@ public class TouchDebugger : MonoBehaviour
 
     private void UpdateInput()
     {
+        // Enhanced
         foreach (var touch in Touch.activeTouches)
         {
-            if (touch.isInProgress) enhancedTouchFrames++;
-        }
-        
-        if (Touchscreen.current == null) return;
-        foreach (var touch in Touchscreen.current.touches)
-        {
-            var phase = touch.phase.ReadValue();
-            if (phase == TouchPhase.Began || phase == TouchPhase.Moved)
-            {
-                touchFrames++;
-            }
+            if (touch.phase == TouchPhase.Ended) _enhancedTouchUp++;
         }
     }
-    
+
     private void UpdateCanvas()
     {
         text.text =
-            $"Touch Frames: {touchFrames}\n" +
-            $"Enhanced Touch Frames: {enhancedTouchFrames}\n" +
-            $"Button Presses: {buttonPresses}";
+            $"Enhanced Touch Up: {_enhancedTouchUp}\n" +
+            $"EventUp: {_eventTouchUp}\n" +
+            $"Button Presses: {_buttonPresses}\n";
     }
 }
